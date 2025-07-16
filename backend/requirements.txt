@@ -1,0 +1,67 @@
+# Smart Home IoT Backend Dependencies
+# ===================
+
+# FastAPI Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# WebSocket Support
+websockets==12.0
+python-socketio==5.10.0
+
+# Database & Time Series
+influxdb-client==1.39.0
+redis==5.0.1
+hiredis==2.2.3
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+PyJWT==2.8.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+bcrypt==4.1.2
+
+# Background Tasks & Workers
+celery==5.3.4
+kombu==5.3.4
+
+# HTTP & Networking
+httpx==0.25.2
+aiohttp==3.9.1
+
+# Data Processing & Validation
+python-dateutil==2.8.2
+numpy==1.24.3
+pandas==2.0.3
+
+# Logging & Monitoring
+structlog==23.2.0
+prometheus-client==0.19.0
+
+# Environment & Configuration
+python-dotenv==1.0.0
+click==8.1.7
+
+# Development & Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2
+faker==20.1.0
+
+# CORS & Middleware
+slowapi==0.1.9
+limits==3.7.0
+
+# Email Support (Optional)
+fastapi-mail==1.4.1
+
+# Database Migrations (if needed)
+alembic==1.13.1
+
+# Utilities
+pytz==2023.3
+croniter==2.0.1
+schedule==1.2.1 
