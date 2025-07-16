@@ -6,10 +6,53 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script>
+    // Add error handling
+    window.addEventListener('error', function(e) {
+      console.error('JavaScript Error:', e.error);
+      document.getElementById('fallback-message').innerHTML = 
+        '<div style="color: red; padding: 20px; font-family: Arial;">ERROR: ' + e.error.message + '</div>';
+    });
+    
+    // Check if Angular loads
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        if (!document.querySelector('app-root').innerHTML.trim()) {
+          document.getElementById('fallback-message').innerHTML = `
+            <div style="padding: 20px; font-family: Arial; background: #f0f0f0; margin: 20px;">
+              <h2>⚠️ Angular Not Loading</h2>
+              <p>The Angular app failed to bootstrap. Please check the browser console for errors.</p>
+              <p>Common issues:</p>
+              <ul>
+                <li>JavaScript errors in console</li>
+                <li>Missing dependencies</li>
+                <li>TypeScript compilation errors</li>
+              </ul>
+            </div>
+          `;
+        }
+      }, 2000);
+    });
+  </script>
 </head>
 <body class="mat-typography">
-  <app-root></app-root>
+  <app-root>
+    <div id="fallback-message" style="padding: 20px; font-family: Arial; text-align: center;">
+      <h2>🔄 Loading Smart Home IoT Dashboard...</h2>
+      <p>Please wait while the application loads.</p>
+      <div style="margin: 20px 0;">
+        <div style="display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+      </div>
+    </div>
+  </app-root>
+  
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </body>
 </html> 
