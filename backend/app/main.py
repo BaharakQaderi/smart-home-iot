@@ -23,6 +23,9 @@ from app.core.database import influxdb_client
 from app.core.websocket import websocket_manager
 from app.core.security import get_password_hash
 
+# Workers
+from app.workers.sensor_simulator import sensor_simulator
+
 # API routes
 from app.api.auth import router as auth_router
 from app.api.sensors import router as sensors_router
@@ -69,13 +72,27 @@ async def lifespan(app: FastAPI):
         logger.error(f"Failed to connect to InfluxDB: {e}")
         raise
     
-    # Start background workers (if needed)
+    # Start sensor simulation system
+    try:
+        await sensor_simulator.start()
+        logger.info("Sensor simulation system started")
+    except Exception as e:
+        logger.error(f"Failed to start sensor simulation system: {e}")
+        # Continue startup even if sensors fail
+    
     logger.info("Backend startup completed successfully")
     
     yield
     
     # Shutdown
     logger.info("Shutting down Smart Home IoT Backend...")
+    
+    # Stop sensor simulation system
+    try:
+        await sensor_simulator.stop()
+        logger.info("Sensor simulation system stopped")
+    except Exception as e:
+        logger.error(f"Error stopping sensor simulation system: {e}")
     
     # Close database connections
     try:

@@ -1,0 +1,94 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h1>Smart Home IoT Dashboard</h1>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="refreshData()">
+        <mat-icon>refresh</mat-icon>
+        Refresh Data
+      </button>
+    </div>
+  </div>
+
+  <div class="loading-spinner" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+    <p>Loading sensor data...</p>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <mat-card>
+      <mat-card-content>
+        <mat-icon color="warn">error</mat-icon>
+        <span>{{ error }}</span>
+        <button mat-button color="primary" (click)="refreshData()">Retry</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="rooms-grid" *ngIf="!isLoading && !error">
+    <mat-card class="room-card" *ngFor="let room of roomData">
+      <mat-card-header>
+        <mat-card-title>{{ getRoomDisplayName(room.room_id) }}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-icon>sensors</mat-icon>
+          Last updated: {{ room.timestamp | date:'short' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="sensor-readings">
+          <div class="reading-item temperature">
+            <mat-icon [style.color]="getTemperatureColor(room.temperature)">device_thermostat</mat-icon>
+            <div class="reading-info">
+              <span class="reading-label">Temperature</span>
+              <span class="reading-value" [style.color]="getTemperatureColor(room.temperature)">
+                {{ room.temperature }}°C
+              </span>
+            </div>
+          </div>
+          
+          <div class="reading-item humidity">
+            <mat-icon color="primary">water_drop</mat-icon>
+            <div class="reading-info">
+              <span class="reading-label">Humidity</span>
+              <span class="reading-value">{{ room.humidity }}%</span>
+            </div>
+          </div>
+          
+          <div class="reading-item status">
+            <mat-icon [style.color]="getStatusColor(room.status)">
+              {{ room.status === 'comfortable' ? 'sentiment_satisfied' : 'sentiment_neutral' }}
+            </mat-icon>
+            <div class="reading-info">
+              <span class="reading-label">Status</span>
+              <span class="reading-value" [style.color]="getStatusColor(room.status)">
+                {{ room.status | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="system-info">
+    <mat-card>
+      <mat-card-content>
+        <h3>System Status</h3>
+        <div class="status-info">
+          <div class="info-item">
+            <mat-icon>schedule</mat-icon>
+            <span>Last Update: {{ lastUpdate | date:'short' }}</span>
+          </div>
+          <div class="info-item">
+            <mat-icon>home</mat-icon>
+            <span>Rooms Monitored: {{ roomData.length }}</span>
+          </div>
+          <div class="info-item">
+            <mat-icon>sensors</mat-icon>
+            <span>Status: {{ error ? 'Offline' : 'Online' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> 

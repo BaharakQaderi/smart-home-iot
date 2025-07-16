@@ -3,75 +3,120 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
-    <mat-toolbar color="primary">
-      <mat-icon>home</mat-icon>
-      <span>Smart Home IoT Dashboard</span>
-    </mat-toolbar>
-    
     <div class="container">
-      <mat-card class="welcome-card">
-        <mat-card-header>
-          <mat-card-title>Welcome to Smart Home IoT</mat-card-title>
-          <mat-card-subtitle>Phase 1 Complete - Ready for Phase 2 Development</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p>🎉 <strong>Phase 1 Foundation Complete!</strong></p>
-          <ul>
-            <li>✅ Backend API with JWT Authentication</li>
-            <li>✅ InfluxDB Time-Series Database</li>
-            <li>✅ WebSocket Real-time Communication</li>
-            <li>✅ Docker Containerization</li>
-            <li>✅ Nginx Reverse Proxy</li>
-            <li>✅ Frontend Application Structure</li>
-          </ul>
-          <p><strong>Next:</strong> Phase 2 - Sensor Data Simulation & Visualization</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="testBackend()">
-            Test Backend Connection
-          </button>
-          <button mat-raised-button color="accent" (click)="testWebSocket()">
-            Test WebSocket
-          </button>
-        </mat-card-actions>
-      </mat-card>
+      <h1>Smart Home IoT Dashboard</h1>
+      <p>✅ Angular is working!</p>
+      
+      <div class="dashboard-preview">
+        <h2>Room Temperature Status</h2>
+        <div class="rooms-simple">
+          <div class="room-card" *ngFor="let room of rooms">
+            <h3>{{ room.name }}</h3>
+            <div class="temperature">🌡️ {{ room.temperature }}°C</div>
+            <div class="humidity">💧 {{ room.humidity }}%</div>
+            <div class="status" [style.color]="getStatusColor(room.status)">
+              {{ room.status }}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="system-info">
+        <h3>System Status</h3>
+        <p>Last Update: {{ lastUpdate | date:'short' }}</p>
+        <p>Rooms Monitored: {{ rooms.length }}</p>
+        <button (click)="refreshData()">Refresh Data</button>
+      </div>
     </div>
   `,
   styles: [`
     .container {
-      max-width: 800px;
-      margin: 20px auto;
       padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: white;
     }
     
-    .welcome-card {
+    .rooms-simple {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
       margin: 20px 0;
     }
     
-    ul {
-      margin: 16px 0;
+    .room-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    li {
-      margin: 8px 0;
+    .temperature { font-size: 24px; margin: 10px 0; }
+    .humidity { font-size: 18px; margin: 5px 0; }
+    .status { font-size: 16px; font-weight: bold; margin: 5px 0; }
+    
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
     }
     
-    mat-card-actions {
-      display: flex;
-      gap: 12px;
+    button:hover {
+      background: #45a049;
     }
   `]
 })
 export class AppComponent {
   title = 'smart-home-iot-frontend';
-
-  testBackend() {
-    console.log('Testing backend connection...');
-    // TODO: Implement backend connection test
+  lastUpdate = new Date();
+  
+  rooms = [
+    { name: 'Living Room', temperature: 22.5, humidity: 45, status: 'comfortable' },
+    { name: 'Bedroom', temperature: 20.0, humidity: 50, status: 'comfortable' },
+    { name: 'Kitchen', temperature: 23.0, humidity: 40, status: 'comfortable' },
+    { name: 'Bathroom', temperature: 24.0, humidity: 60, status: 'comfortable' },
+    { name: 'Basement', temperature: 18.0, humidity: 55, status: 'cool' },
+    { name: 'Outdoor', temperature: 15.0, humidity: 70, status: 'cool' }
+  ];
+  
+  constructor() {
+    // Update data every 30 seconds
+    setInterval(() => {
+      this.refreshData();
+    }, 30000);
   }
-
-  testWebSocket() {
-    console.log('Testing WebSocket connection...');
-    // TODO: Implement WebSocket connection test
+  
+  refreshData() {
+    // Add small random variation to simulate sensor updates
+    this.rooms.forEach(room => {
+      const variation = (Math.random() - 0.5) * 2;
+      room.temperature = Math.round((room.temperature + variation) * 10) / 10;
+      
+      // Update status based on temperature
+      if (room.temperature < 18) room.status = 'cold';
+      else if (room.temperature < 20) room.status = 'cool';
+      else if (room.temperature < 25) room.status = 'comfortable';
+      else if (room.temperature < 28) room.status = 'warm';
+      else room.status = 'hot';
+    });
+    
+    this.lastUpdate = new Date();
+  }
+  
+  getStatusColor(status: string): string {
+    const colors: { [key: string]: string } = {
+      'cold': '#64B5F6',
+      'cool': '#81C784',
+      'comfortable': '#A5D6A7',
+      'warm': '#FFB74D',
+      'hot': '#F06292'
+    };
+    return colors[status] || '#ffffff';
   }
 } 

@@ -139,9 +139,9 @@ class InfluxDBManager:
             
             # Set timestamp
             if timestamp:
-                point.time(timestamp, timezone.utc)
+                point.time(timestamp)
             else:
-                point.time(datetime.utcnow(), timezone.utc)
+                point.time(datetime.now(timezone.utc))
             
             # Write point
             await asyncio.get_event_loop().run_in_executor(
@@ -178,9 +178,9 @@ class InfluxDBManager:
                 
                 # Set timestamp
                 if data.get("timestamp"):
-                    point.time(data["timestamp"], timezone.utc)
+                    point.time(data["timestamp"])
                 else:
-                    point.time(datetime.utcnow(), timezone.utc)
+                    point.time(datetime.now(timezone.utc))
                 
                 points.append(point)
             
