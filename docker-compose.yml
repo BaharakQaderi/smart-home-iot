@@ -94,17 +94,23 @@ services:
       - /app/node_modules
     command: >
       sh -c "
-        if [ ! -d node_modules ]; then
-          echo 'Installing dependencies...'
-          npm install
-        fi
+        apk add --no-cache curl
+        echo 'Installing Angular CLI globally...'
+        npm install -g @angular/cli
+        echo 'Installing project dependencies...'
+        npm install --legacy-peer-deps
         echo 'Starting Angular development server...'
-        npm start
+        ng serve --host 0.0.0.0 --port 4200
       "
     depends_on:
       - backend
     networks:
       - smart-home-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4200"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # Grafana - Monitoring dashboards
   grafana:
