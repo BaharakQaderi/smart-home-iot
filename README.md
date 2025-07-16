@@ -6,20 +6,28 @@
 [![Angular](https://img.shields.io/badge/Angular-Frontend-red?logo=angular)](https://github.com/BaharakQaderi/smart-home-iot)
 [![InfluxDB](https://img.shields.io/badge/InfluxDB-Database-purple?logo=influxdb)](https://github.com/BaharakQaderi/smart-home-iot)
 
-A comprehensive Smart Home IoT monitoring system built with **FastAPI**, **Angular**, **InfluxDB**, and **Docker**. This project demonstrates real-time sensor data collection, monitoring, and visualization for home automation systems.
+A comprehensive Smart Home IoT monitoring system built with **FastAPI**, **Angular**, **InfluxDB**, and **Docker**. This project serves as an **educational resource** and **best practice example** for students, demonstrating real-time sensor data collection, monitoring, and visualization for home automation systems.
 
 **🔗 Repository**: https://github.com/BaharakQaderi/smart-home-iot
 
 ## 🎯 Project Purpose
 
-This project is designed to master modern web development technologies by building a production-ready IoT monitoring system. It showcases:
+This project is designed as an **educational resource** and **best practice example** for students learning modern web development technologies. It serves as a comprehensive sample project that demonstrates how to build a production-ready IoT monitoring system. Students can use this as a reference to:
+
+- **Learn by Example**: Study well-structured, professional code organization
+- **Master Modern Stack**: Gain hands-on experience with industry-standard technologies
+- **Best Practices**: Understand proper authentication, API design, and system architecture
+- **Real-world Application**: See how theoretical concepts apply to practical projects
+
+### 🎓 **What Students Will Learn**
 
 - **Real-time Systems**: WebSocket communication for live sensor data
 - **Time-series Data**: InfluxDB for efficient sensor data storage
-- **Modern APIs**: FastAPI with automatic documentation
+- **Modern APIs**: FastAPI with automatic documentation and validation
 - **Containerization**: Docker for consistent development environments
 - **Authentication**: JWT-based secure user management
 - **Monitoring**: Grafana dashboards for system visualization
+- **Project Structure**: Professional codebase organization and documentation
 
 ## 🏗️ Architecture
 
