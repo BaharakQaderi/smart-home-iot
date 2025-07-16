@@ -1,6 +1,25 @@
 # Smart Home IoT Monitoring System
 
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/BaharakQaderi/smart-home-iot)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-blue?logo=docker)](https://github.com/BaharakQaderi/smart-home-iot)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green?logo=fastapi)](https://github.com/BaharakQaderi/smart-home-iot)
+[![Angular](https://img.shields.io/badge/Angular-Frontend-red?logo=angular)](https://github.com/BaharakQaderi/smart-home-iot)
+[![InfluxDB](https://img.shields.io/badge/InfluxDB-Database-purple?logo=influxdb)](https://github.com/BaharakQaderi/smart-home-iot)
+
 A comprehensive Smart Home IoT monitoring system built with **FastAPI**, **Angular**, **InfluxDB**, and **Docker**. This project demonstrates real-time sensor data collection, monitoring, and visualization for home automation systems.
+
+**🔗 Repository**: https://github.com/BaharakQaderi/smart-home-iot
+
+## 🎯 Project Purpose
+
+This project is designed to master modern web development technologies by building a production-ready IoT monitoring system. It showcases:
+
+- **Real-time Systems**: WebSocket communication for live sensor data
+- **Time-series Data**: InfluxDB for efficient sensor data storage
+- **Modern APIs**: FastAPI with automatic documentation
+- **Containerization**: Docker for consistent development environments
+- **Authentication**: JWT-based secure user management
+- **Monitoring**: Grafana dashboards for system visualization
 
 ## 🏗️ Architecture
 
@@ -38,6 +57,18 @@ A comprehensive Smart Home IoT monitoring system built with **FastAPI**, **Angul
 - **Grafana** - Advanced monitoring dashboards
 - **Nginx** - Reverse proxy
 
+## 🎯 Current Status
+
+**Phase 1: Foundation - ✅ COMPLETE**
+- ✅ Backend API with FastAPI
+- ✅ JWT Authentication system
+- ✅ InfluxDB integration
+- ✅ WebSocket real-time communication
+- ✅ Docker containerization
+- ✅ API documentation with Swagger
+
+**Next: Phase 2 - Core Sensors** (Ready for development)
+
 ## 📋 Prerequisites
 
 - **Docker** and **Docker Compose** installed
@@ -49,7 +80,7 @@ A comprehensive Smart Home IoT monitoring system built with **FastAPI**, **Angul
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/BaharakQaderi/smart-home-iot.git
 cd smart-home-iot
 ```
 
@@ -261,11 +292,19 @@ rm -rf data/
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository: https://github.com/BaharakQaderi/smart-home-iot/fork
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes and commit: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+### 🐛 Reporting Issues
+
+Found a bug or have a suggestion? Please open an issue:
+- **New Issue**: https://github.com/BaharakQaderi/smart-home-iot/issues/new
+- **View Issues**: https://github.com/BaharakQaderi/smart-home-iot/issues
 
 ## 📄 License
 
@@ -280,6 +319,10 @@ If you encounter any issues:
 4. Review the documentation
 
 ## 📧 Contact
+
+- **Repository**: https://github.com/BaharakQaderi/smart-home-iot
+- **Issues**: https://github.com/BaharakQaderi/smart-home-iot/issues
+- **Author**: [BaharakQaderi](https://github.com/BaharakQaderi)
 
 For questions or support, please open an issue in the repository.
 
