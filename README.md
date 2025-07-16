@@ -74,6 +74,9 @@ This project is designed as an **educational resource** and **best practice exam
 - ✅ WebSocket real-time communication
 - ✅ Docker containerization
 - ✅ API documentation with Swagger
+- ✅ Frontend dashboard with real-time data visualization
+- ✅ Data verification system
+- ✅ Responsive UI with Chart.js integration
 
 **Next: Phase 2 - Core Sensors** (Ready for development)
 
@@ -109,11 +112,22 @@ docker-compose ps
 ```
 
 You should see all services running:
-- **Backend API**: http://localhost:8000
-- **Frontend**: http://localhost:4200
-- **InfluxDB**: http://localhost:8086
-- **Grafana**: http://localhost:3000
+- **Backend API**: http://localhost:8001
+- **Frontend**: http://localhost:4201
+- **InfluxDB**: http://localhost:8087
+- **Grafana**: http://localhost:3001
 - **Redis**: localhost:6379
+
+### 5. Verify Data Pipeline (Optional)
+```bash
+./verify-data.sh
+```
+
+This script will:
+- ✅ Check all services are running
+- ✅ Test backend API authentication
+- ✅ Verify real-time data is flowing
+- ✅ Show sample sensor data
 
 ## 🔧 Development Setup
 
@@ -129,7 +143,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ### Frontend Development
 ```bash
 cd frontend
-npm install
+npm install --legacy-peer-deps
 ng serve --host 0.0.0.0 --port 4200
 ```
 
@@ -146,6 +160,7 @@ ng serve --host 0.0.0.0 --port 4200
 - `GET /api/v1/sensors/{sensor_id}` - Get specific sensor
 - `GET /api/v1/sensors/{sensor_id}/data` - Get sensor data
 - `GET /api/v1/sensors/type/{sensor_type}` - Get sensors by type
+- `GET /api/v1/sensors/latest` - Get latest readings from all sensors
 
 ### 🏠 Rooms
 - `GET /api/v1/rooms/` - Get all rooms
@@ -168,7 +183,7 @@ ng serve --host 0.0.0.0 --port 4200
 
 Connect to the WebSocket endpoint for real-time updates:
 ```
-ws://localhost:8000/ws
+ws://localhost:8001/ws
 ```
 
 ### WebSocket Message Types
@@ -186,35 +201,56 @@ ws://localhost:8000/ws
 ### Example API Calls
 ```bash
 # Login
-curl -X POST http://localhost:8000/api/v1/auth/login \
+curl -X POST http://localhost:8001/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "admin123"}'
 
 # Get sensors (requires authentication)
-curl -X GET http://localhost:8000/api/v1/sensors/ \
+curl -X GET http://localhost:8001/api/v1/sensors/ \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 
 # Health check
-curl http://localhost:8000/health
+curl http://localhost:8001/health
+
+# Get latest sensor data
+curl -X GET http://localhost:8001/api/v1/sensors/latest \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ## 📱 Frontend Features
 
 ### Dashboard
-- Real-time sensor monitoring
-- System status overview
-- Room-based organization
-- Historical data visualization
+- Real-time sensor monitoring (updates every 5 seconds)
+- System status overview with connection indicators
+- Room-based organization (6 rooms monitored)
+- Historical data visualization with Chart.js
+- **Data verification panel** - Click "Show Data Verification" to see:
+  - Real-time API connection status
+  - Raw backend data display
+  - Update counters and response times
+  - Chart data inspection tools
 
 ### Sensor Management
-- Sensor status monitoring
-- Data visualization
-- Alert management
+- Temperature, humidity, and energy monitoring
+- Device-level power consumption tracking
+- Real-time status indicators
+- Interactive chart switching
 
 ### User Interface
-- Responsive design
+- Responsive design (mobile-friendly)
 - Material Design components
 - Real-time updates via WebSockets
+- Professional dashboard layout
+
+## 🔍 Data Verification
+
+The frontend includes a built-in verification system to prove data authenticity:
+
+1. **Open Dashboard**: http://localhost:4201
+2. **Click "Show Data Verification"**: Shows real-time backend connection
+3. **Watch Updates**: Counter increments every 5 seconds
+4. **Compare Data**: Raw API data matches dashboard display
+5. **Test Controls**: Use refresh/clear buttons to test functionality
 
 ## 🛠️ Project Structure
 
@@ -241,6 +277,7 @@ smart-home-iot/
 │   ├── influxdb/           # InfluxDB data
 │   ├── grafana/            # Grafana data
 │   └── logs/               # Application logs
+├── verify-data.sh          # Data verification script
 ├── docker-compose.yml      # Multi-container setup
 ├── .env                   # Environment variables
 └── README.md             # This file
@@ -248,7 +285,7 @@ smart-home-iot/
 
 ## 🔍 Monitoring with Grafana
 
-Access Grafana at http://localhost:3000
+Access Grafana at http://localhost:3001
 - **Username**: admin
 - **Password**: admin123
 
@@ -271,32 +308,53 @@ docker-compose down -v
 rm -rf data/
 ```
 
+## 🚨 Troubleshooting
+
+### Common Issues
+
+1. **Port Conflicts**: If ports are already in use, modify `docker-compose.yml`
+2. **Permission Errors**: Ensure Docker has proper permissions
+3. **Frontend Build Issues**: Run `npm install --legacy-peer-deps` in frontend/
+4. **API Connection Issues**: Check if backend is running on port 8001
+
+### Verification Steps
+
+1. **Check Services**: `docker-compose ps`
+2. **View Logs**: `docker-compose logs [service-name]`
+3. **Test API**: `curl http://localhost:8001/health`
+4. **Run Verification**: `./verify-data.sh`
+
 ## 📚 Development Phases
 
-### ✅ Phase 1: Foundation (Current)
-- [x] Backend API setup
-- [x] Authentication system
-- [x] WebSocket support
-- [x] Docker environment
-- [x] Basic API endpoints
+### ✅ Phase 1: Foundation (COMPLETE)
+- [x] Backend API setup with FastAPI
+- [x] JWT Authentication system
+- [x] InfluxDB integration for time-series data
+- [x] WebSocket real-time communication
+- [x] Docker containerization
+- [x] Frontend dashboard with Angular
+- [x] Real-time data visualization
+- [x] Data verification system
+- [x] Responsive UI design
 
 ### 🔄 Phase 2: Core Sensors (Next)
-- [ ] Sensor data simulation
-- [ ] Real-time data streaming
-- [ ] Frontend dashboard
-- [ ] Data visualization
+- [ ] Enhanced sensor simulation
+- [ ] Advanced data analytics
+- [ ] Alert system implementation
+- [ ] Historical data analysis
+- [ ] Mobile app development
 
 ### 🔄 Phase 3: Advanced Features
 - [ ] Security monitoring
-- [ ] Alert system
-- [ ] User management
-- [ ] Mobile support
+- [ ] Machine learning integration
+- [ ] Advanced user management
+- [ ] Third-party integrations
 
 ### 🔄 Phase 4: Production Ready
 - [ ] Performance optimization
-- [ ] Complete testing
+- [ ] Comprehensive testing
 - [ ] Deployment automation
-- [ ] Comprehensive documentation
+- [ ] Load balancing
 
 ## 🤝 Contributing
 
@@ -312,7 +370,7 @@ We welcome contributions! Please follow these steps:
 
 Found a bug or have a suggestion? Please open an issue:
 - **New Issue**: https://github.com/BaharakQaderi/smart-home-iot/issues/new
-- **View Issues**: https://github.com/BaharakQaderi/smart-home-iot/issues
+- **View Issues**: https://github.com/BaharakQaderi/smart-home-iot/issues/new
 
 ## 📄 License
 
@@ -323,8 +381,9 @@ This project is licensed under the MIT License.
 If you encounter any issues:
 1. Check the logs: `docker-compose logs`
 2. Verify all services are running: `docker-compose ps`
-3. Check the health endpoints
-4. Review the documentation
+3. Run the verification script: `./verify-data.sh`
+4. Check the health endpoints: `curl http://localhost:8001/health`
+5. Review the API documentation: http://localhost:8001/docs
 
 ## 📧 Contact
 
