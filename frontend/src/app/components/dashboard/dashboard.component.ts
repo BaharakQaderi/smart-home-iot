@@ -158,9 +158,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error fetching sensor data:', error);
-          this.systemHealthy = false;
-          this.loadMockData();
-          this.lastUpdate = new Date();
+          if (error.status === 401) {
+            console.log('401 Unauthorized - attempting to refresh token...');
+            this.sensorService.forceLogin().then(() => {
+              // Retry after login
+              setTimeout(() => this.refreshData(), 1000);
+            });
+          } else {
+            this.systemHealthy = false;
+            this.loadMockData();
+            this.lastUpdate = new Date();
+          }
         }
       });
     } catch (error) {
@@ -403,5 +411,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dataUpdateCounter = 0;
     this.generateInitialChartData();
     this.updateCharts();
+  }
+
+  async forceLogin(): Promise<void> {
+    console.log('Forcing login from dashboard...');
+    await this.sensorService.forceLogin();
+    // Trigger a data refresh after login
+    setTimeout(() => {
+      this.refreshData();
+    }, 1000);
   }
 } 

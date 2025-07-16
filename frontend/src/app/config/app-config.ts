@@ -271,12 +271,12 @@ export const defaultConfig: AppConfig = {
     timeout: 10000,
     retryAttempts: 3,
     endpoints: {
-      auth: '/api/auth',
-      sensors: '/api/sensors',
+      auth: '/api/v1/auth',
+      sensors: '/api/v1/sensors',
       websocket: '/ws',
-      health: '/api/health',
-      users: '/api/users',
-      dashboard: '/api/dashboard'
+      health: '/health',
+      users: '/api/v1/users',
+      dashboard: '/api/v1/dashboard'
     }
   },
   

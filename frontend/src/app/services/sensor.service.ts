@@ -46,18 +46,53 @@ export class SensorService {
     this.startPeriodicUpdates();
   }
 
+  // Method to force re-authentication
+  public async forceLogin(): Promise<void> {
+    console.log('Forcing login...');
+    localStorage.removeItem('access_token');
+    this.token = null;
+    await this.login('admin', 'admin123');
+  }
+
+  // Method to clear token (for debugging)
+  public clearToken(): void {
+    console.log('Clearing token...');
+    localStorage.removeItem('access_token');
+    this.token = null;
+  }
+
   private initializeToken(): void {
     // For demo purposes, we'll use a basic auth approach
     // In production, this should be handled by an authentication service
     this.token = localStorage.getItem('access_token');
-    if (!this.token) {
-      // Try to get a token by logging in with default credentials
+    console.log('Existing token found:', this.token ? 'Yes' : 'No');
+    
+    if (!this.token || this.isTokenExpired(this.token)) {
+      // Clear expired token and get a new one
+      console.log('No token found or token expired, attempting login...');
+      localStorage.removeItem('access_token');
+      this.token = null;
       this.login('admin', 'admin123');
+    }
+  }
+
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const expiry = payload.exp * 1000; // Convert to milliseconds
+      const now = Date.now();
+      const expired = now > expiry;
+      console.log('Token expiry check:', { expired, expiresAt: new Date(expiry), now: new Date(now) });
+      return expired;
+    } catch (error) {
+      console.log('Token parsing error:', error);
+      return true; // Treat invalid tokens as expired
     }
   }
 
   private async login(username: string, password: string): Promise<void> {
     try {
+      console.log('Attempting login to:', `${this.baseUrl}/auth/login`);
       const response = await fetch(`${this.baseUrl}/auth/login`, {
         method: 'POST',
         headers: {
@@ -66,13 +101,27 @@ export class SensorService {
         body: JSON.stringify({ username, password })
       });
 
+      console.log('Login response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
         this.token = data.access_token;
         localStorage.setItem('access_token', this.token!);
+        console.log('Successfully authenticated');
+      } else {
+        console.error('Login failed with status:', response.status);
+        const errorText = await response.text();
+        console.error('Login error details:', errorText);
+        
+        // Clear any existing token
+        this.token = null;
+        localStorage.removeItem('access_token');
       }
     } catch (error) {
       console.error('Login failed:', error);
+      // Clear any existing token
+      this.token = null;
+      localStorage.removeItem('access_token');
     }
   }
 
@@ -83,6 +132,9 @@ export class SensorService {
     
     if (this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
+      console.log('Adding Authorization header with token:', this.token ? 'Yes' : 'No');
+    } else {
+      console.log('No token available for Authorization header');
     }
     
     return new HttpHeaders(headers);
@@ -160,6 +212,13 @@ export class SensorService {
       },
       error => {
         console.error('Error fetching sensor data:', error);
+        if (error.status === 401) {
+          console.log('401 Unauthorized in updateRoomsData - attempting to refresh token...');
+          this.forceLogin().then(() => {
+            // Retry after login
+            setTimeout(() => this.updateRoomsData(), 1000);
+          });
+        }
       }
     );
   }
