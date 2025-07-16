@@ -1,0 +1,189 @@
+<div class="dashboard-container">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <h1>🏠 Smart Home IoT Dashboard</h1>
+    <div class="system-status">
+      <div class="status-indicator" [ngClass]="{'online': systemHealthy, 'offline': !systemHealthy}">
+        <span class="status-dot"></span>
+        <span class="status-text">{{ systemHealthy ? 'System Online' : 'System Offline' }}</span>
+      </div>
+      <div class="last-update">
+        <span>Last Update: {{ lastUpdate | date:'short' }}</span>
+        <span class="update-counter">Updates: {{ dataUpdateCounter }}</span>
+        <span class="response-time">API: {{ apiResponseTime }}ms</span>
+      </div>
+      <div class="verification-controls">
+        <button class="btn-verification" (click)="toggleDataVerification()">
+          {{ showDataVerification ? 'Hide' : 'Show' }} Data Verification
+        </button>
+        <button class="btn-refresh" (click)="forceDataRefresh()">🔄 Refresh</button>
+        <button class="btn-clear" (click)="clearChartData()">🗑️ Clear Charts</button>
+        <button class="btn-login" (click)="forceLogin()">🔐 Fix Login</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Verification Panel -->
+  <div class="verification-panel" *ngIf="showDataVerification">
+    <h3>🔍 Data Verification Panel</h3>
+    <div class="verification-content">
+      <div class="verification-stats">
+        <div class="stat">
+          <strong>System Status:</strong> {{ systemHealthy ? 'Connected to Backend' : 'Disconnected' }}
+        </div>
+        <div class="stat">
+          <strong>Data Updates:</strong> {{ dataUpdateCounter }} (every 5 seconds)
+        </div>
+        <div class="stat">
+          <strong>API Response Time:</strong> {{ apiResponseTime }}ms
+        </div>
+        <div class="stat">
+          <strong>Chart Data Points:</strong> {{ timeLabels.length }}
+        </div>
+      </div>
+      
+      <div class="raw-data-section">
+        <h4>Latest Raw API Data (Sample)</h4>
+        <div class="raw-data-grid">
+          <div class="raw-data-item" *ngFor="let room of rooms.slice(0, 3)">
+            <h5>{{ room.name }}</h5>
+            <pre>{{ getRawDataForRoom(room.name.toLowerCase().replace(' ', '_')) | json }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-section">
+    <div class="kpi-card">
+      <div class="kpi-icon">⚡</div>
+      <div class="kpi-content">
+        <h3>Total Energy</h3>
+        <div class="kpi-value">{{ totalEnergyUsage.toFixed(0) }}W</div>
+        <div class="kpi-subtitle">Current Usage</div>
+      </div>
+    </div>
+    
+    <div class="kpi-card">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-content">
+        <h3>Daily Cost</h3>
+        <div class="kpi-value">${{ totalDailyCost.toFixed(2) }}</div>
+        <div class="kpi-subtitle">Today's Expense</div>
+      </div>
+    </div>
+    
+    <div class="kpi-card">
+      <div class="kpi-icon">🏠</div>
+      <div class="kpi-content">
+        <h3>Rooms</h3>
+        <div class="kpi-value">{{ rooms.length }}</div>
+        <div class="kpi-subtitle">Monitored</div>
+      </div>
+    </div>
+    
+    <div class="kpi-card">
+      <div class="kpi-icon">🌡️</div>
+      <div class="kpi-content">
+        <h3>Avg Temperature</h3>
+        <div class="kpi-value">{{ averageTemperature.toFixed(1) }}°C</div>
+        <div class="kpi-subtitle">Indoor Average</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section">
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3>📈 {{ activeChart === 'temp' ? 'Temperature' : activeChart === 'humidity' ? 'Humidity' : 'Energy' }} Trends</h3>
+        <div class="chart-controls">
+          <button (click)="toggleChartType('temp')" [ngClass]="{'active': activeChart === 'temp'}">Temperature</button>
+          <button (click)="toggleChartType('humidity')" [ngClass]="{'active': activeChart === 'humidity'}">Humidity</button>
+          <button (click)="toggleChartType('energy')" [ngClass]="{'active': activeChart === 'energy'}">Energy</button>
+        </div>
+      </div>
+      <div class="chart-info">
+        <span *ngIf="activeChart === 'temp'">Real-time temperature readings from all rooms (°C)</span>
+        <span *ngIf="activeChart === 'humidity'">Real-time humidity levels from all rooms (%)</span>
+        <span *ngIf="activeChart === 'energy'">Real-time power consumption from all rooms (W)</span>
+        <span class="data-points">{{ timeLabels.length }} data points</span>
+      </div>
+      <div class="chart-content">
+        <canvas #temperatureChart width="400" height="200"></canvas>
+      </div>
+    </div>
+    
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3>⚡ Energy Consumption</h3>
+        <div class="chart-info">Real-time Power Usage</div>
+      </div>
+      <div class="chart-content">
+        <canvas #energyChart width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Room Cards Section -->
+  <div class="rooms-section">
+    <h2>🏠 Room Status</h2>
+    <div class="rooms-grid">
+      <div class="room-card" *ngFor="let room of rooms" [ngClass]="'room-' + room.status">
+        <div class="room-header">
+          <h3>{{ room.name }}</h3>
+          <div class="room-status-badge" [ngClass]="'status-' + room.status">
+            {{ room.status }}
+          </div>
+        </div>
+        
+        <div class="room-metrics">
+          <div class="metric">
+            <div class="metric-icon">🌡️</div>
+            <div class="metric-data">
+              <div class="metric-value">{{ room.temperature }}°C</div>
+              <div class="metric-label">Temperature</div>
+            </div>
+          </div>
+          
+          <div class="metric">
+            <div class="metric-icon">💧</div>
+            <div class="metric-data">
+              <div class="metric-value">{{ room.humidity }}%</div>
+              <div class="metric-label">Humidity</div>
+            </div>
+          </div>
+          
+          <div class="metric">
+            <div class="metric-icon">⚡</div>
+            <div class="metric-data">
+              <div class="metric-value">{{ room.energyConsumption.toFixed(0) }}W</div>
+              <div class="metric-label">Power</div>
+            </div>
+          </div>
+          
+          <div class="metric">
+            <div class="metric-icon">💰</div>
+            <div class="metric-data">
+              <div class="metric-value">${{ room.energyCost.toFixed(2) }}</div>
+              <div class="metric-label">Daily Cost</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="room-devices">
+          <div class="devices-header">
+            <span>Devices: {{ getActiveDeviceCount(room.devices) }}/{{ room.devices.length }} active</span>
+          </div>
+          <div class="devices-list">
+            <div class="device-item" *ngFor="let device of room.devices" [ngClass]="{'active': device.isActive}">
+              <span class="device-name">{{ device.name }}</span>
+              <span class="device-power">{{ device.power.toFixed(1) }}W</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

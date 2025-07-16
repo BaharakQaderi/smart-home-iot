@@ -1,0 +1,545 @@
+/* Temperature Gauge Component Styles */
+
+.temperature-gauge {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  // Size variants
+  &.size-small {
+    padding: 16px;
+    .gauge-wrapper {
+      width: 120px;
+      height: 80px;
+    }
+    .temperature-value {
+      font-size: 24px;
+    }
+    .gauge-details {
+      display: none;
+    }
+  }
+
+  &.size-medium {
+    padding: 20px;
+    .gauge-wrapper {
+      width: 200px;
+      height: 120px;
+    }
+    .temperature-value {
+      font-size: 36px;
+    }
+  }
+
+  &.size-large {
+    padding: 32px;
+    .gauge-wrapper {
+      width: 280px;
+      height: 160px;
+    }
+    .temperature-value {
+      font-size: 48px;
+    }
+  }
+
+  // Alert states
+  &.alert-warning {
+    border-left: 4px solid #ff9800;
+    .alert-banner {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+    }
+  }
+
+  &.alert-critical {
+    border-left: 4px solid #f44336;
+    .alert-banner {
+      background: #ffebee;
+      border-left: 4px solid #f44336;
+    }
+  }
+
+  // Comfort level styling
+  &.comfort-cold {
+    background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+  }
+
+  &.comfort-cool {
+    background: linear-gradient(135deg, #e0f2f1 0%, #ffffff 100%);
+  }
+
+  &.comfort-comfortable {
+    background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%);
+  }
+
+  &.comfort-warm {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+  }
+
+  &.comfort-hot {
+    background: linear-gradient(135deg, #ffebee 0%, #ffffff 100%);
+  }
+}
+
+// Alert Banner
+.alert-banner {
+  display: flex;
+  align-items: center;
+  margin: -24px -24px 20px -24px;
+  padding: 12px 24px;
+  border-radius: 16px 16px 0 0;
+  animation: slideInDown 0.3s ease-out;
+
+  .alert-icon {
+    margin-right: 8px;
+    font-size: 20px;
+    color: #ff9800;
+  }
+
+  .alert-message {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+}
+
+// Main Gauge Container
+.gauge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+// Gauge Wrapper
+.gauge-wrapper {
+  position: relative;
+  width: 200px;
+  height: 120px;
+  margin-bottom: 16px;
+}
+
+// SVG Gauge
+.gauge-background {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+
+  .gauge-bg-arc {
+    opacity: 0.3;
+  }
+
+  .comfort-zone-cold {
+    opacity: 0.6;
+  }
+
+  .comfort-zone-optimal {
+    opacity: 0.8;
+  }
+
+  .comfort-zone-warm {
+    opacity: 0.6;
+  }
+
+  .gauge-temperature-arc {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: stroke 0.3s ease;
+  }
+
+  .gauge-markers {
+    .gauge-label {
+      font-size: 12px;
+      font-weight: 500;
+      fill: #666;
+      font-family: 'Roboto', sans-serif;
+    }
+  }
+
+  .gauge-needle {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+    transform-origin: 100px 100px;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// Temperature Display
+.temperature-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+
+  .temperature-value {
+    font-size: 36px;
+    font-weight: 300;
+    color: #333;
+    line-height: 1;
+    margin-bottom: 4px;
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .temperature-unit {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+}
+
+// Trend Indicator
+.trend-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+
+  .trend-icon {
+    font-size: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  .trend-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &:hover .trend-icon {
+    transform: scale(1.1);
+  }
+}
+
+// Gauge Details
+.gauge-details {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+// Detail Section
+.detail-section {
+  margin-bottom: 16px;
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .detail-icon {
+      font-size: 18px;
+      color: #666;
+      margin-right: 8px;
+    }
+
+    .detail-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+    }
+  }
+
+  .detail-content {
+    margin-left: 26px;
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 4px 0;
+
+    .detail-key {
+      font-size: 14px;
+      color: #666;
+      font-weight: 400;
+    }
+
+    .detail-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      
+      // Comfort level colors
+      &.comfort-cold { color: #2196F3; }
+      &.comfort-cool { color: #00BCD4; }
+      &.comfort-comfortable { color: #4CAF50; }
+      &.comfort-warm { color: #FF9800; }
+      &.comfort-hot { color: #F44336; }
+      
+      // System status colors
+      &.status-heating { color: #ff5722; }
+      &.status-cooling { color: #2196f3; }
+      &.status-idle { color: #9e9e9e; }
+    }
+  }
+}
+
+// System Status Icons
+.system-status-icons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px 0;
+
+  .status-icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: translateY(-1px);
+    }
+
+    .status-icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+      
+      &.heating-active {
+        color: #ff5722;
+        animation: pulse 2s infinite;
+      }
+      
+      &.cooling-active {
+        color: #2196f3;
+        animation: pulse 2s infinite;
+      }
+      
+      &.idle {
+        color: #9e9e9e;
+      }
+    }
+
+    .status-label {
+      font-size: 12px;
+      color: #666;
+      font-weight: 500;
+    }
+  }
+}
+
+// Last Update
+.last-update {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+
+  .update-icon {
+    font-size: 16px;
+    color: #666;
+    margin-right: 8px;
+  }
+
+  .update-time {
+    font-size: 12px;
+    color: #666;
+  }
+}
+
+// Loading State
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #666;
+
+  .loading-text {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+}
+
+// Animations
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .temperature-gauge {
+    padding: 16px;
+    
+    &.size-medium {
+      .gauge-wrapper {
+        width: 180px;
+        height: 100px;
+      }
+      .temperature-value {
+        font-size: 32px;
+      }
+    }
+    
+    &.size-large {
+      .gauge-wrapper {
+        width: 220px;
+        height: 130px;
+      }
+      .temperature-value {
+        font-size: 40px;
+      }
+    }
+  }
+  
+  .gauge-details {
+    .detail-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      
+      .detail-value {
+        font-weight: 600;
+      }
+    }
+  }
+  
+  .system-status-icons {
+    gap: 12px;
+    
+    .status-icon-wrapper {
+      padding: 6px;
+      
+      .status-icon {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .temperature-gauge {
+    padding: 12px;
+    
+    .gauge-wrapper {
+      width: 160px;
+      height: 90px;
+    }
+    
+    .temperature-value {
+      font-size: 28px;
+    }
+    
+    .gauge-details {
+      .detail-header {
+        .detail-label {
+          font-size: 14px;
+        }
+      }
+      
+      .detail-item {
+        .detail-key,
+        .detail-value {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .temperature-gauge {
+    background: #1e1e1e;
+    color: #ffffff;
+    
+    .gauge-background {
+      .gauge-label {
+        fill: #cccccc;
+      }
+    }
+    
+    .temperature-display {
+      .temperature-value {
+        color: #ffffff;
+      }
+      
+      .temperature-unit {
+        color: #cccccc;
+      }
+    }
+    
+    .detail-section {
+      .detail-header {
+        .detail-icon {
+          color: #cccccc;
+        }
+        
+        .detail-label {
+          color: #ffffff;
+        }
+      }
+      
+      .detail-item {
+        .detail-key {
+          color: #cccccc;
+        }
+        
+        .detail-value {
+          color: #ffffff;
+        }
+      }
+    }
+    
+    .trend-indicator {
+      background: rgba(255, 255, 255, 0.1);
+      
+      .trend-label {
+        color: #cccccc;
+      }
+    }
+    
+    .last-update {
+      background: rgba(255, 255, 255, 0.05);
+      
+      .update-icon,
+      .update-time {
+        color: #cccccc;
+      }
+    }
+  }
+} 
